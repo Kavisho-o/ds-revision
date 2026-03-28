@@ -14,9 +14,8 @@
 int maxSubArray(vector<int>& nums) {
     int maxSum = INT_MIN, currSum = 0;
     for(int x : nums){
-        currSum += x;
-        maxSum = max(maxSum, currSum);
-        if(currSum < 0) currSum = 0;
+        currSum = max(x,currSum+x);
+        maxSum = max(maxSum,currSum);
     }
     return maxSum;
 }
