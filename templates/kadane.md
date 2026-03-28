@@ -9,6 +9,7 @@
 - "maximum profit type problem"
 - "subarray with best score"
 
+## blackbox
 ```
 int maxSubArray(vector<int>& nums) {
     int maxSum = INT_MIN, currSum = 0;
