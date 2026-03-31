@@ -22,6 +22,7 @@
 
 
 ## black box
+```
 vector<int> majorityElement(vector<int>& nums) {
 
     int candidate1 = 0, candidate2 = 0;
@@ -64,3 +65,4 @@ vector<int> majorityElement(vector<int>& nums) {
 
     return ans;
 }
+```
