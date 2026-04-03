@@ -34,9 +34,9 @@ class Solution {
     int maxLength(vector<int>& arr) {
         
         int n=arr.size();
-        int sum=0;
+        ll sum=0;
 
-        int mx=-1;
+        int mx=-0;
 
         unordered_map<int,int> mp;
         mp[0]=-1;       // if pref sum becomes 0 at index i
@@ -46,10 +46,11 @@ class Solution {
 
             sum+=arr[i];
             if (mp.find(sum)!=mp.end()) mx=max(mx,i-mp[sum]);  
+            else mp[sum] = i;
 
-        }
+        }   
 
-        
+        return mx;
 
     }
 };
