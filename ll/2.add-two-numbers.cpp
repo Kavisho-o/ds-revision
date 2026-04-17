@@ -109,25 +109,57 @@ public:
 
     //     return false;
     // }
-    ListNode* deleteMiddle(ListNode* head) {
 
-        if (!head || !head->next) return nullptr;
+    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
 
-        ListNode* slow = head;
-        ListNode* fast = head;
-        ListNode* prev = nullptr;
+        ListNode* a = l1;
+        ListNode* b = l2;
 
-        while (fast && fast->next){
+        ListNode* res = new ListNode(-1);
+        ListNode* head = res;
 
-            prev = slow;
-            slow = slow->next;
-            fast = fast->next->next;
+        int rem = 0;
+
+        while (a || b){
+
+            int aval = 0;
+            int bval = 0;
+
+            if (a) aval = a->val;
+            if (b) bval = b->val;
+
+            int temp = aval + bval + rem;
+
+            if (temp >= 10) {
+
+                res->next = new ListNode(temp%10);
+                rem = 1;
+
+            } 
+
+            else {
+
+                res->next = new ListNode(temp);
+                rem = 0;
+
+            }
+
+            a = a ? a->next : nullptr;
+            b = b ? b->next : nullptr;
+            res = res->next;
 
         }
 
-        prev->next = prev->next->next;
+        if (rem!=0){
+
+            ListNode* z = new ListNode(rem);
+            res->next = z;
+
+        }
+
+        return head->next;
         
-        return prev;
     }
+
 };
 

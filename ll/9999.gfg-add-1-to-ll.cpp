@@ -1,3 +1,5 @@
+// https://www.geeksforgeeks.org/problems/add-1-to-a-number-represented-as-linked-list/1
+
 #pragma GCC optimize("O2,unroll-loops")
 #pragma GCC target("avx2,bmi,bmi2,popcnt")
 
@@ -31,18 +33,70 @@ const ll  MOD  = 1e9+7;
 auto chmin = [](auto& a, auto b){ return b<a ? a=b,true : false; };
 auto chmax = [](auto& a, auto b){ return b>a ? a=b,true : false; };
 
-struct ListNode {
+// struct ListNode {
 
-    int val;
-    ListNode *next;
-    ListNode() : val(0), next(nullptr) {}
-    ListNode(int x) : val(x), next(nullptr) {}
-    ListNode(int x, ListNode *next) : val(x), next(next) {}
+//     int val;
+//     ListNode *next;
+//     ListNode() : val(0), next(nullptr) {}
+//     ListNode(int x) : val(x), next(nullptr) {}
+//     ListNode(int x, ListNode *next) : val(x), next(next) {}
 
+// };
+
+struct Node
+{
+    int data;
+    struct Node* next;
+
+    Node(int x){
+        data = x;
+        next = NULL;
+    }
 };
 
 class Solution {
 public:
+    Node* addOne(Node* head) {
+        
+        Node* h = reverse(head);
+        int rem = 0;
+
+        Node* r = h;
+
+        while (r){
+
+            if (r->data + rem > 9){
+
+                r->data = 0;
+                rem = 1;
+
+            }
+
+            else {
+
+                r->data = r->data + rem;
+                rem = 0;
+
+            }
+
+            r = r->next;
+
+        }
+
+        Node *f = reverse(h);
+
+        if (rem!=0){
+
+            Node *l = new Node(1);
+            l->next = f;
+
+            return l;
+
+        }
+
+        return f;
+
+    }
 
     // // dummy head
     // ListNode* removeElements(ListNode* head, int val) {
@@ -76,21 +130,21 @@ public:
     //     return slow;  // middle (or 2nd middle if even length)
     // }
 
-    // ListNode* reverse(ListNode* head) {
+    Node* reverse(Node* head) {
 
-    //     ListNode* prev = nullptr;
+        Node* prev = nullptr;
 
-    //     while (head) {
+        while (head) {
 
-    //         auto nxt = head->next;
-    //         head->next = prev;
-    //         prev = head;
-    //         head = nxt;
+            auto nxt = head->next;
+            head->next = prev;
+            prev = head;
+            head = nxt;
 
-    //     }
+        }
 
-    //     return prev;
-    // }
+        return prev;
+    }
 
     // // floyd's
 
@@ -109,25 +163,8 @@ public:
 
     //     return false;
     // }
-    ListNode* deleteMiddle(ListNode* head) {
 
-        if (!head || !head->next) return nullptr;
 
-        ListNode* slow = head;
-        ListNode* fast = head;
-        ListNode* prev = nullptr;
-
-        while (fast && fast->next){
-
-            prev = slow;
-            slow = slow->next;
-            fast = fast->next->next;
-
-        }
-
-        prev->next = prev->next->next;
-        
-        return prev;
-    }
 };
+
 

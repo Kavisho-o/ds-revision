@@ -109,25 +109,23 @@ public:
 
     //     return false;
     // }
-    ListNode* deleteMiddle(ListNode* head) {
 
-        if (!head || !head->next) return nullptr;
+    ListNode *getIntersectionNode(ListNode *a, ListNode *b) {
 
-        ListNode* slow = head;
-        ListNode* fast = head;
-        ListNode* prev = nullptr;
+        if (!a || !b) return nullptr;
 
-        while (fast && fast->next){
+        ListNode* ahead=a;
+        ListNode* bhead=b;
 
-            prev = slow;
-            slow = slow->next;
-            fast = fast->next->next;
+        while (a != b){
+
+            a = a? a->next : bhead;
+            b = b? b->next : ahead;
 
         }
 
-        prev->next = prev->next->next;
+        return a;
         
-        return prev;
     }
 };
 

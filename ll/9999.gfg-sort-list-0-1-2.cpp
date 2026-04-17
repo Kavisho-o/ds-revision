@@ -1,3 +1,5 @@
+// https://www.geeksforgeeks.org/problems/given-a-linked-list-of-0s-1s-and-2s-sort-it/1
+
 #pragma GCC optimize("O2,unroll-loops")
 #pragma GCC target("avx2,bmi,bmi2,popcnt")
 
@@ -31,15 +33,26 @@ const ll  MOD  = 1e9+7;
 auto chmin = [](auto& a, auto b){ return b<a ? a=b,true : false; };
 auto chmax = [](auto& a, auto b){ return b>a ? a=b,true : false; };
 
-struct ListNode {
+class Node {
+  public:
+    int data;
+    Node* next;
 
-    int val;
-    ListNode *next;
-    ListNode() : val(0), next(nullptr) {}
-    ListNode(int x) : val(x), next(nullptr) {}
-    ListNode(int x, ListNode *next) : val(x), next(next) {}
-
+    Node(int x) {
+        data = x;
+        next = nullptr;
+    }
 };
+
+// struct ListNode {
+
+//     int val;
+//     ListNode *next;
+//     ListNode() : val(0), next(nullptr) {}
+//     ListNode(int x) : val(x), next(nullptr) {}
+//     ListNode(int x, ListNode *next) : val(x), next(next) {}
+
+// };
 
 class Solution {
 public:
@@ -61,20 +74,20 @@ public:
 
     // }
 
-    // // floyd's
-    // ListNode* middleNode(ListNode* head) {
+    // floyd's
+    Node* middleNode(Node* head) {
 
-    //     ListNode *slow = head, *fast = head;
+        Node *slow = head, *fast = head;
 
-    //     while (fast && fast->next) {
+        while (fast && fast->next) {
 
-    //         slow = slow->next;
-    //         fast = fast->next->next;
+            slow = slow->next;
+            fast = fast->next->next;
 
-    //     }
+        }
 
-    //     return slow;  // middle (or 2nd middle if even length)
-    // }
+        return slow;  // middle (or 2nd middle if even length)
+    }
 
     // ListNode* reverse(ListNode* head) {
 
@@ -109,25 +122,41 @@ public:
 
     //     return false;
     // }
-    ListNode* deleteMiddle(ListNode* head) {
 
-        if (!head || !head->next) return nullptr;
+    Node* segregate(Node* head) {
+        
+        Node* zhead = new Node(-1);
+        Node* ohead = new Node(-1);
+        Node* thead = new Node(-1);
+        
+        Node* ztail = zhead;
+        Node* otail = ohead;
+        Node* ttail = thead;
 
-        ListNode* slow = head;
-        ListNode* fast = head;
-        ListNode* prev = nullptr;
+        Node* curr = head;
 
-        while (fast && fast->next){
+        while (curr){
 
-            prev = slow;
-            slow = slow->next;
-            fast = fast->next->next;
+            if (curr->data==0) { ztail->next=curr; ztail = curr; }
+            else if (curr->data==1) { otail->next=curr; otail = curr; }
+            else { ttail->next = curr; ttail = curr; }
+
+            curr = curr->next;
 
         }
 
-        prev->next = prev->next->next;
+        if (ohead->next) ztail->next = ohead->next;
+        else ztail->next = thead->next;
+
+        otail->next = thead->next;
+        ttail->next = nullptr;
+
+        head = zhead->next;
+        delete zhead, ohead, thead;
+
+        return head;
         
-        return prev;
     }
 };
+
 

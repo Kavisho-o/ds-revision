@@ -62,19 +62,20 @@ public:
     // }
 
     // // floyd's
-    // ListNode* middleNode(ListNode* head) {
+    ListNode* mn(ListNode* head) {
 
-    //     ListNode *slow = head, *fast = head;
+        ListNode *slow = head, *fast = head, *prev = nullptr;
 
-    //     while (fast && fast->next) {
+        while (fast && fast->next) {
 
-    //         slow = slow->next;
-    //         fast = fast->next->next;
+            prev = slow;
+            slow = slow->next;
+            fast = fast->next->next;
 
-    //     }
+        }
 
-    //     return slow;  // middle (or 2nd middle if even length)
-    // }
+        return prev;  // middle (or 2nd middle if even length)
+    }
 
     // ListNode* reverse(ListNode* head) {
 
@@ -109,25 +110,55 @@ public:
 
     //     return false;
     // }
-    ListNode* deleteMiddle(ListNode* head) {
 
-        if (!head || !head->next) return nullptr;
+    ListNode* merge(ListNode* l, ListNode* r){
 
-        ListNode* slow = head;
-        ListNode* fast = head;
-        ListNode* prev = nullptr;
+        ListNode temp(-1);
+        ListNode* s = &temp;
 
-        while (fast && fast->next){
+        while (l && r){
 
-            prev = slow;
-            slow = slow->next;
-            fast = fast->next->next;
+            if (l->val > r->val) {
+
+                s->next = r;
+                r = r->next;
+
+            }
+
+            else{
+
+                s->next = l;
+                l = l->next;
+
+            }
+
+            s = s->next;
 
         }
 
-        prev->next = prev->next->next;
-        
-        return prev;
+        if (l) s->next = l;
+        if (r) s->next = r;
+
+        return temp.next;
+
+    }
+
+    ListNode* sortList(ListNode* head){
+
+        if (!head || !head->next) return head;
+
+        ListNode* mid = mn(head);
+
+        ListNode* l = head;
+        ListNode* r = mid->next;
+
+        mid->next = nullptr;
+
+        l = sortList(l);
+        r = sortList(r);
+
+        return merge(l,r);
+
     }
 };
 
