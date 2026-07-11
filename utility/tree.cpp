@@ -45,67 +45,149 @@ struct TreeNode {
 class Solution {
 public:
 
-    // DFS
-    int dfs(TreeNode* node) {
+    vector<vector<int>> levelOrder(TreeNode* root){
 
-        if (!node) return 0;           
-
-        int L = dfs(node->left);
-        int R = dfs(node->right);
-        
-        return max(L, R) + 1;          // example: height
-    }
-
-    // BFS
-    vector<vector<int>> levelOrder(TreeNode* root) {
-
-        vector<vector<int>> res;
-
-        if (!root) return res;
-
+        vector<vector<int>> v;
         queue<TreeNode*> q;
         q.push(root);
 
-        while (!q.empty()) {
+        while (!q.empty()){
 
-            int n = q.size();
-            vector<int> level;
+            vector<int> l;
+            int sz = q.size();
 
-            while (n--) {
+            for (int i=0; i<sz; i++){
 
-                auto node = q.front(); q.pop();
-                level.push_back(node->val);
+                TreeNode* node=q.front(); q.pop();
+                l.push_back(node->val);
 
-                if (node->left)  q.push(node->left);
+                if (node->left) q.push(node->left);
                 if (node->right) q.push(node->right);
 
             }
 
-            res.push_back(level);
+            v.push_back(l);
         }
 
-        return res;
-    }
-
-    
-    int ans = INT_MIN;
-
-    int gain(TreeNode* node) {
-
-        if (!node) return 0;
-
-        int L = max(0, gain(node->left));
-        int R = max(0, gain(node->right));
-
-        ans = max(ans, node->val + L + R);   
-        return node->val + max(L, R);     
+        return v;
 
     }
 
-    int maxPathSum(TreeNode* root) {
+    void recursiveInorder(TreeNode* root, vector<int> &v){
 
-        gain(root);
-        return ans;
+        // left -> root -> right
+
+        if (!root) return;
+        if (root->left) recursiveInorder(root->left,v);
+        v.push_back(root->val);
+        if (root->right) recursiveInorder(root->right,v);
 
     }
+
+    void recursivePreorder(TreeNode* root, vector<int> &v){
+
+        // root -> left -> right
+
+        if (!root) return;
+        v.push_back(root->val);
+        if (root->left) recursivePreorder(root->left,v);
+        if (root->right) recursivePreorder(root->right,v);
+
+    }
+
+    void recursivePostorder(TreeNode* root, vector<int> &v){
+
+        // left -> right -> root
+
+        if (!root) return;
+        if (root->left) recursivePostorder(root->left,v);
+        if (root->right) recursivePostorder(root->right,v);
+        v.push_back(root->val);
+
+    }
+
+    vector<int> morrisPreorder(TreeNode* root){
+
+        vector<int> v;
+        if (!root) return v;
+
+        TreeNode* curr = root;
+        while (curr){
+
+            TreeNode* ptr = curr->left;
+
+            if (ptr){                              // left found -> go to the rightmost node of this subtree
+
+                while (ptr->right && ptr->right!=curr) ptr = ptr->right;
+
+                if (ptr->right==curr){            // a thread already exists here -> break it, use curr and move on to its right
+
+                    ptr->right = nullptr;         // to free up redundant space
+                    curr = curr->right;
+
+                }
+
+                else{                            // create a thread to the root and move to its left
+
+                    ptr->right = curr;
+                    v.push_back(curr->val);
+                    curr = curr->left;
+
+                }
+            }
+
+            else{                               // no left found -> move on to right
+
+                v.push_back(curr->val);
+                curr = curr->right;
+
+            }
+
+        }
+        return v;
+
+    }
+
+    vector<int> morrisInorder(TreeNode* root){
+
+        vector<int> v;
+        if (!root) return v;
+
+        TreeNode* curr = root;
+        while (curr){
+
+            TreeNode* ptr = curr->left;
+
+            if (ptr){                              // left found -> go to the rightmost node of this subtree
+
+                while (ptr->right && ptr->right!=curr) ptr = ptr->right;
+
+                if (ptr->right==curr){            // a thread already exists here -> break it, use curr and move on to its right
+
+                    ptr->right = nullptr;         // to free up redundant space
+                    v.push_back(curr->val);
+                    curr = curr->right;
+
+                }
+
+                else{                            // create a thread to the root and move to its left
+
+                    ptr->right = curr;
+                    curr = curr->left;
+
+                }
+            }
+
+            else{                               // no left found -> move on to right
+
+                v.push_back(curr->val);
+                curr = curr->right;
+
+            }
+
+        }
+        return v;
+
+    }
+
 };
