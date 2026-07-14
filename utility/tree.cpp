@@ -45,6 +45,15 @@ struct TreeNode {
 class Solution {
 public:
 
+    int height(TreeNode* root) {
+
+        if (!root) return 0;
+        int h=1;
+        h+=max(height(root->left),height(root->right));
+        return h;
+        
+    }
+
     vector<vector<int>> levelOrder(TreeNode* root){
 
         vector<vector<int>> v;
