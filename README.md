@@ -3,7 +3,6 @@
 This repo contains my complete topic-wise DSA revision along with important templates for lookup.
 
 
-
 ## Focus
 
 1. Speedrun the entirety of DSA using Striver's A2Z sheet as a black box.
