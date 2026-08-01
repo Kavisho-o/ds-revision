@@ -24,7 +24,7 @@ const ll  MOD  = 1e9+7;
 #define fi            first
 #define se            second
 #define sz(x)         (int)(x).size()
-#define rep(i,a,b)    for(int i=(a); i<(b); ++i)
+#define rep(i,a,b)    for(int i=(a); i<(b); i++)
 #define rrep(i,a,b)   for(int i=(a); i>=(b); --i)
 #define each(x,v)     for(auto& x : v)
 
@@ -45,11 +45,70 @@ struct TreeNode {
 class Solution {
 public:
 
-    vector<int> distanceK(TreeNode* root, TreeNode* target, int k) {
+    // we perform 2 bfs'es 
+    // 1. to build parent-child relationship
+    // 2. to burn
 
-        
-        
-    }
+    int timeToBurnTree(TreeNode* root, int start){
+
+        unordered_map<int,TreeNode*> mp;   // child -> parent
+        TreeNode* target=nullptr;
+
+        queue<TreeNode*> q;
+        q.push(root);
+
+        while (!q.empty()){
+
+            int sz=sz(q);
+            rep(i,0,sz){
+
+                auto node=q.front(); q.pop();
+                if (node->val==start) target=node;
+                
+                if (node->left) {
+
+                    q.push({node->left});
+                    mp[node->left->val]=node;
+
+                }
+                if (node->right) {
+
+                    q.push({node->right});
+                    mp[node->right->val]=node;
+
+                }
+
+            }
+
+        }
+
+        unordered_map<int,int> vis;
+
+        q.push(target);
+        vis[target->val]=1;
+
+        int sec=-1;
+
+        while (!q.empty()){
+
+            int sz=sz(q);
+            rep(i,0,sz){
+
+                auto node=q.front(); q.pop();
+                vis[node->val]=1;
+
+                if (node->left && !vis[node->left->val]) q.push({node->left});
+                if (node->right && !vis[node->right->val]) q.push({node->right});
+                if (mp[node->val] && !vis[mp[node->val]->val]) q.push({mp[node->val]});
+
+            }
+            sec++;
+
+        }
+
+        return sec;
+
+	}	
 
     // int height(TreeNode* root) {
 
@@ -206,3 +265,131 @@ public:
     // }
 
 };
+
+int main() {
+
+    Solution sol;
+
+    // ============================================================
+    // Test 1
+    // Balanced tree
+    //
+    //          1
+    //        /   \
+    //       2     3
+    //      / \   / \
+    //     4  5  6   7
+    //
+    // Start = 5
+    // ============================================================
+
+    TreeNode* t1 = new TreeNode(1);
+    t1->left = new TreeNode(2);
+    t1->right = new TreeNode(3);
+    t1->left->left = new TreeNode(4);
+    t1->left->right = new TreeNode(5);
+    t1->right->left = new TreeNode(6);
+    t1->right->right = new TreeNode(7);
+
+    cout << sol.timeToBurnTree(t1, 5) << endl;
+    // Expected: 4
+
+
+
+    // ============================================================
+    // Test 2
+    // Left skewed tree
+    //
+    //      1
+    //     /
+    //    2
+    //   /
+    //  3
+    // /
+    //4
+    //
+    // Start = 4
+    // ============================================================
+
+    TreeNode* t2 = new TreeNode(1);
+    t2->left = new TreeNode(2);
+    t2->left->left = new TreeNode(3);
+    t2->left->left->left = new TreeNode(4);
+
+    cout << sol.timeToBurnTree(t2, 4) << endl;
+    // Expected: 3
+
+
+
+    // ============================================================
+    // Test 3
+    // Right skewed tree
+    //
+    // 1
+    //  \
+    //   2
+    //    \
+    //     3
+    //      \
+    //       4
+    //
+    // Start = 2
+    // ============================================================
+
+    TreeNode* t3 = new TreeNode(1);
+    t3->right = new TreeNode(2);
+    t3->right->right = new TreeNode(3);
+    t3->right->right->right = new TreeNode(4);
+
+    cout << sol.timeToBurnTree(t3, 2) << endl;
+    // Expected: 2
+
+
+
+    // ============================================================
+    // Test 4
+    // Single node
+    //
+    //      10
+    //
+    // Start = 10
+    // ============================================================
+
+    TreeNode* t4 = new TreeNode(10);
+
+    cout << sol.timeToBurnTree(t4, 10) << endl;
+    // Expected: 0
+
+
+
+    // ============================================================
+    // Test 5
+    // Asymmetric tree
+    //
+    //             1
+    //           /   \
+    //          2     3
+    //         /     / \
+    //        4     5   6
+    //       /           \
+    //      7             8
+    //
+    // Start = 7
+    // ============================================================
+
+    TreeNode* t5 = new TreeNode(1);
+    t5->left = new TreeNode(2);
+    t5->right = new TreeNode(3);
+
+    t5->left->left = new TreeNode(4);
+    t5->left->left->left = new TreeNode(7);
+
+    t5->right->left = new TreeNode(5);
+    t5->right->right = new TreeNode(6);
+    t5->right->right->right = new TreeNode(8);
+
+    cout << sol.timeToBurnTree(t5, 7) << endl;
+    // Expected: 6
+
+    return 0;
+}

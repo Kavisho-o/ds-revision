@@ -24,54 +24,87 @@ const ll  MOD  = 1e9+7;
 #define fi            first
 #define se            second
 #define sz(x)         (int)(x).size()
-#define rep(i,a,b)    for(int i=(a); i<(b); ++i)
+#define rep(i,a,b)    for(int i=(a); i<(b); i++)
 #define rrep(i,a,b)   for(int i=(a); i>=(b); --i)
 #define each(x,v)     for(auto& x : v)
 
 auto chmin = [](auto& a, auto b){ return b<a ? a=b,true : false; };
 auto chmax = [](auto& a, auto b){ return b>a ? a=b,true : false; };
 
-// struct TreeNode {
+struct TreeNode {
 
-//     int val;
-//     TreeNode *left;
-//     TreeNode *right;
-//     TreeNode() : val(0), left(nullptr), right(nullptr) {}
-//     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
-//     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode() : val(0), left(nullptr), right(nullptr) {}
+    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+    TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
 
-// };
+};
 
 class Solution {
 public:
 
-    int widthOfBinaryTree(TreeNode* root) {
-        
-        if (!root) return 0;
+    // we perform 2 bfs'es 
+    // 1. to build parent-child relationship
+    // 2. to find k dist nodes	
 
-        ll mx=1;
-        queue<pair<TreeNode*,ll>> q;    // node,index
+    vector<int> distanceK(TreeNode* root, TreeNode* target, int k) {
 
-        q.push({root,0});
+        unordered_map<int,TreeNode*> mp;   // child -> parent
+
+        queue<TreeNode*> q;
+        q.push(root);
+
         while (!q.empty()){
 
-            ll sz=q.size();
-            ll s=q.front().second;
-            ll e=q.back().second;
-            
-            for (ll i=0; i<sz; i++){
+            int sz=sz(q);
+            rep(i,0,sz){
 
-                auto [node,idx] = q.front(); q.pop();
-                idx-=s;                                         // normalize to avoid overflow
+                auto node=q.front(); q.pop();
+                if (node->left) {
 
-                if (node->left) q.push({node->left,idx*2});     // supposed position of left
-                if (node->right) q.push({node->right,idx*2+1}); // supposed position of right
+                    q.push({node->left});
+                    mp[node->left->val]=node;
+
+                }
+                if (node->right) {
+
+                    q.push({node->right});
+                    mp[node->right->val]=node;
+
+                }
 
             }
-            mx=max(mx,e-s+1);
 
         }
-        return (int)mx;
+
+        unordered_map<int,int> vis;
+
+        q.push(target);
+        while (k-- && !q.empty()){
+
+            int sz=sz(q);
+            rep(i,0,sz){
+
+                auto node=q.front(); q.pop();
+                vis[node->val]=1;
+
+                if (node->left && !vis[node->left->val]) q.push({node->left});
+                if (node->right && !vis[node->right->val]) q.push({node->right});
+                if (mp[node->val] && !vis[mp[node->val]->val]) q.push({mp[node->val]});
+
+            }
+        }
+
+        vi v;
+        while (!q.empty()){
+
+            v.pb(q.front()); q.pop();
+
+        }
+
+        return v;
         
     }
 
