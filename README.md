@@ -1,33 +1,40 @@
-## Data Structures - Revision and Templates
+# invariant
 
-This repo contains my complete topic-wise DSA revision along with important templates for lookup.
+A working knowledge base of algorithmic problem solving — interview-style DSA and competitive programming — organized around patterns, not problem count.
 
+This is not a collection of solved problems. It's where I keep what I've actually learned, so I don't have to relearn it.
 
-## Focus
+---
 
-1. Speedrun the entirety of DSA using Striver's A2Z sheet as a black box.
-2. ~10 probs/day.
-3. Polishing pattern-recognition skills.
-4. Ace any interview.
-5. Maintaining an error log to emphasize my weak areas.
+## Philosophy
 
+Solving a problem and understanding a problem are different achievements. This repository only keeps the second kind.
 
-## How to use this repo
+Every entry should answer: *what pattern does this represent, and would I recognize it again in a different problem?* If a solution doesn't teach something reusable, it doesn't belong here.
 
-- Go to templates/ for important templates that are generally used in majority of questions.
-- Pick any topic and go through all the questions.
-- Unnecessary easy questions are intentionally excluded.
+Competitive programming and interview DSA are treated as one discipline. CP sharpens implementation speed and mathematical thinking; DSA sharpens pattern recognition under interview constraints. Both feed the same notes and, where genuinely shared, the same templates.
 
+---
 
-## Methodology
+## Learning Workflow
 
-- Try to solve the problems as if you are in an interview.
-- Prefer doing it on a text editor (VS code or sublime text in my recommendation).
-- Explain to yourself the non optimized approach before implementing the optimal one.
- 
+Every problem, DSA or CP, goes through the same loop:
 
-## Pledge
+```
+Understand → Bruteforce → Observation → Optimize → Implement → Clean up → Reflect → Revise
+```
 
-- We discourage the use of AI while doing DSA. If you do, youre either a beginner or a loser. Grow a pair.
-- If you use python for DSA, please refrain from using this repo as this is aimed for people who are actually serious about themselves (just kidding, you're cool haha).
+Correctness before optimization. Optimization before elegance.
+
+---
+
+## Goals
+
+- Build durable pattern recognition, not a large solved-problem count
+- Keep a template library trustworthy enough to use cold, under time pressure
+- Turn every real mistake into documentation, so it only costs time once
+- Make CP and interview prep reinforce each other instead of competing for time
+
+---
+
 

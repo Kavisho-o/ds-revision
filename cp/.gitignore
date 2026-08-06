@@ -1,0 +1,6 @@
+## .cph cache files
+.cph/
+/.vscode/
+
+## all the .exe files
+*.exe
